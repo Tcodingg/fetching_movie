@@ -8,15 +8,19 @@ const fetchData = async (searchTerm)=>{
 
     console.log(response.data);
 };
-let timeOutId;
+const debounce = (func)=>{
+    let timeOutId;    
+        return (...args) =>{
+            if(timeOutId){
+                clearTimeout(timeOutId);
+            }
+            timeOutId = setTimeout(() => {
+                func.apply(null, args);
+            }, 1000);
+         }
+}
 const input = document.querySelector('input');
 const onInput = (event) =>{
-    if(timeOutId){
-        clearTimeout(timeOutId);
-    }
-    timeOutId=setTimeout(() => {
-     fetchData(event.target.value);   
-    }, 1000);
-    
+     fetchData(event.target.value);     
 }
-input.addEventListener('input', onInput);
+input.addEventListener('input', debounce(onInput));
